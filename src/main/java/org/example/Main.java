@@ -1,6 +1,7 @@
 package org.example;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
@@ -8,6 +9,7 @@ import java.util.Scanner;
 public class Main {
     static final ClienteDao CLIENTE_DAO = new ClienteDao();
     static final MotoristaDao MOTORISTA_DAO = new MotoristaDao();
+    static final PedidoDao PEDIDO_DAO = new PedidoDao();
     static Scanner SC = new Scanner(System.in);
     public static void main(String[] args) {
         inicio();
@@ -43,6 +45,10 @@ public class Main {
                 }
                 case 2:{
                     cadastrarMotorista();
+                    break;
+                }
+                case 3:{
+                    criarPedido();
                     break;
                 }
             }
@@ -84,6 +90,50 @@ public class Main {
             MOTORISTA_DAO.cadastrarMotorista(nome,cnh,veiculo,cidadeBase);
             System.out.println("Cadastro realizado com sucesso");
         } catch (SQLException e) {
+            System.out.println("Erro ao acessar o banco de dados");
+            e.printStackTrace();
+        }
+    }
+
+    public static void criarPedido (){
+        ArrayList <Cliente> clientes = new ArrayList<>();
+        try {
+            clientes = CLIENTE_DAO.listarCliente();
+            if (clientes == null || clientes.isEmpty()){
+                System.out.println("Nenhum Cliente Cadastrado no Momento");
+            }
+            else {
+                for (Cliente cliente: clientes){
+                    System.out.println(cliente.toString());
+                }
+                System.out.println("Insira o ID do cliente que deseja usar para criar o pedido ou insira 0 para retornar");
+                int clienteId = SC.nextInt();
+                for (Cliente cliente: clientes){
+                    if (clienteId == 0){
+                        System.out.println("Ok, vamos retornar ao menu principal.");
+                        return;
+                    }
+                    if (cliente.getId() == clienteId){
+                        System.out.println("Cliente valido");
+                        System.out.println("Informe a data do pedido:");
+                        SC.nextLine();
+                        String dataPedido = SC.nextLine();
+                        System.out.println("Insira o volume do pedido em Metros cubicos:");
+                        Double volumeM3 = SC.nextDouble();
+                        System.out.println("Insira o peso do pedido em KG:");
+                        Double peso = SC.nextDouble();
+                        System.out.println("Informe o status do pedido:");
+                        SC.nextLine();
+                        String status = SC.nextLine();
+                        PEDIDO_DAO.criarPedido(clienteId, dataPedido, volumeM3, peso, status);
+                        System.out.println("Pedido Criado com Sucesso!");
+                    }
+                    System.out.println("Id do cliente não encontrado. " +
+                            "Informe um Id valido.");
+                    criarPedido();
+                }
+            }
+        }catch (SQLException e){
             System.out.println("Erro ao acessar o banco de dados");
             e.printStackTrace();
         }

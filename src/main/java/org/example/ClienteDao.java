@@ -2,7 +2,9 @@ package org.example;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class ClienteDao {
 
@@ -25,6 +27,34 @@ public class ClienteDao {
             stmt.setString(4,cidade);
             stmt.setString(5,estado);
             stmt.executeUpdate();
+        }
+    }
+
+    public ArrayList<Cliente> listarCliente()throws SQLException{
+        ArrayList<Cliente>clientes = new ArrayList<>();
+        String command = """
+                SELECT id,
+                nome,
+                cpf_cnpj,
+                endereco,
+                cidade,
+                estado
+                FROM cliente
+                """;
+        try (Connection conn = Conexao.conectar()){
+            PreparedStatement stmt = conn.prepareStatement(command);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                clientes.add(new Cliente(
+                        rs.getInt("id"),
+                        rs.getString("nome"),
+                        rs.getString("cpf_cnpj"),
+                        rs.getString("endereco"),
+                        rs.getString("cidade"),
+                        rs.getString("estado")
+                ));
+            }
+            return clientes;
         }
     }
 }
