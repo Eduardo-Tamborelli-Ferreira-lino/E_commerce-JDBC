@@ -15,7 +15,8 @@ public class Historico{
     }
 
     // Construtor para novos registros
-    public Historico(int entregaId, String descricao) {
+    public Historico
+    (int entregaId, String descricao) {
         this.entregaId = entregaId;
         this.descricao = descricao;
     }

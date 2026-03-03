@@ -61,6 +61,14 @@ public class Main {
                     registrarEntrega();
                     break;
                 }
+                case 6:{
+                    atualizarEntrega();
+                    break;
+                }
+                case 7:{
+                    listarECM();
+                    break;
+                }
             }
         }
     }
@@ -250,6 +258,51 @@ public class Main {
             System.out.println("Id do cliente não encontrado. " +
                     "Informe um Id valido.");
             registrarEntrega();
+        }
+    }
+
+    public static void atualizarEntrega(){
+        ArrayList<Entrega> entregas = new ArrayList<>();
+        entregas = listarEntregas();
+        for (Entrega entrega: entregas){
+            System.out.println(entrega.toString());
+        }
+        System.out.println("Por favor Insira o ID da entrega que deseja atualizar");
+        int id = SC.nextInt();
+        for (Entrega entrega : entregas){
+            if (entrega.getId() == id){
+                System.out.println(entrega.toString());
+                System.out.println("Escolha valida, Entrega escolhida");
+                System.out.println("Agora coloque o novo status da entrega: ");
+                SC.nextLine();
+                String status = SC.nextLine();
+                try {
+                    ENTREGA_DAO.atualizarEntrega(status, id);
+                    System.out.println("Status da entrega foi atualizado");
+                }catch (SQLException e) {
+                    System.out.println("Erro ao acessar o banco de dados");
+                    e.printStackTrace();
+                    return;
+                }
+            }
+        }
+    }
+
+    public static void listarECM(){
+        ArrayList<EntregaDetalhadaDTO> entrega = new ArrayList<>();
+        try {
+            entrega = ENTREGA_DAO.listarECM();
+            if (entrega == null || entrega.isEmpty()){
+                System.out.println("Nenhuma Entrega foi encontrada");
+                return;
+            }
+            for (EntregaDetalhadaDTO dto : entrega){
+                System.out.println(dto);
+            }
+            return;
+        }catch (SQLException e) {
+            System.out.println("Erro ao acessar o banco de dados");
+            e.printStackTrace();
         }
     }
 
