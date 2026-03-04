@@ -67,7 +67,7 @@ public class EntregaDao {
         }
     }
 
-    public void atualizarEntrega(String status, int id) throws SQLException{
+    public void atualizarEntrega(StatusPedido status, int id) throws SQLException{
         String command = """
                 UPDATE entrega
                 set status = ?

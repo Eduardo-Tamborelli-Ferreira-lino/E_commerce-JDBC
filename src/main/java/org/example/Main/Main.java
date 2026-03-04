@@ -410,8 +410,7 @@ public class Main {
                             }
                             System.out.println("Escolha um status para esse pedido");
                             int opcaoStatus = SC.nextInt() - 1;
-                            StatusPedido statuss = StatusPedido.values()[opcaoStatus];
-                            String status = SC.nextLine();
+                            StatusPedido status = StatusPedido.values()[opcaoStatus];
                             try {
                                 ENTREGA_DAO.atualizarEntrega(status, id);
                                 System.out.println("Status da entrega foi atualizado");
