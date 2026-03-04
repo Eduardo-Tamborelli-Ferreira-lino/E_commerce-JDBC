@@ -2,16 +2,14 @@ package org.example.DAO;
 
 import org.example.Classes.Pedido;
 import org.example.Conexão.Conexao;
+import org.example.Enum.StatusPedido;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 
 public class PedidoDao {
 
-    public void criarPedido(int clienteId, String dataPedido, Double volumeM3, Double peso, String status)throws SQLException{
+    public void criarPedido(Pedido pedido)throws SQLException{
         String command = """
                 INSERT INTO pedido(
                 cliente_id,
@@ -24,11 +22,11 @@ public class PedidoDao {
                 """;
         try (Connection conn = Conexao.conectar()){
             PreparedStatement stmt = conn.prepareStatement(command);
-            stmt.setInt(1, clienteId);
-            stmt.setString(2, dataPedido);
-            stmt.setDouble(3, volumeM3);
-            stmt.setDouble(4, peso);
-            stmt.setString(5,status);
+            stmt.setInt(1, pedido.getClienteId());
+            stmt.setTimestamp(2, pedido.getDataPedido());
+            stmt.setDouble(3, pedido.getVolumeM3());
+            stmt.setDouble(4, pedido.getPeso());
+            stmt.setString(5,pedido.getStatus().getNome());
             stmt.executeUpdate();
         }
     }
@@ -51,10 +49,10 @@ public class PedidoDao {
                 pedido.add(new Pedido(
                         rs.getInt("id"),
                         rs.getInt("cliente_id"),
-                        rs.getString("data_pedido"),
+                        rs.getTimestamp("data_pedido"),
                         rs.getDouble("volume_m3"),
                         rs.getDouble("peso_kg"),
-                        rs.getString("status")
+                        StatusPedido.getDeliveryStatus(rs.getString("status"))
                 ));
             }
             return pedido;

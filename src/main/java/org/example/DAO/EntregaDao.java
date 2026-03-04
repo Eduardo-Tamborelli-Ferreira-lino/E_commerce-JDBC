@@ -5,6 +5,7 @@ import org.example.Conexão.Conexao;
 import org.example.DTO.EntregaDetalhadaDTO;
 import org.example.DTO.MaiorVolumeEntregueDTO;
 import org.example.DTO.TotalEntregasMotoristaDTO;
+import org.example.Enum.StatusPedido;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 
 public class EntregaDao {
 
-    public void gerarEntrega(int pedidoId, int motoristaId, String dataSaida, String dataEntraga, String status)throws SQLException {
+    public void gerarEntrega(Entrega entrega)throws SQLException {
         String command = """
                 INSERT INTO entrega(
                 pedido_id,
@@ -25,13 +26,14 @@ public class EntregaDao {
                 VALUES
                 (?, ?, ?, ?, ?)
                 """;
+        StatusPedido statusPedido;
         try (Connection conn = Conexao.conectar();
              PreparedStatement stmt = conn.prepareStatement(command)){
-            stmt.setInt(1, pedidoId);
-            stmt.setInt(2, motoristaId);
-            stmt.setString(3, dataSaida);
-            stmt.setString(4, dataEntraga);
-            stmt.setString(5, status);
+            stmt.setInt(1, entrega.getPedidoId());
+            stmt.setInt(2, entrega.getMotoristaId());
+            stmt.setTimestamp(3, entrega.getDataSaida());
+            stmt.setString(4, entrega.getDataEntrega());
+            stmt.setString(5, entrega.getStatus().getNome());
             stmt.executeUpdate();
         }
     }
@@ -56,9 +58,9 @@ public class EntregaDao {
                         rs.getInt("id"),
                         rs.getInt("pedido_id"),
                         rs.getInt("motorista_id"),
-                        rs.getString("data_saida"),
+                        rs.getTimestamp("data_saida"),
                         rs.getString("data_entrega"),
-                        rs.getString("status")
+                        StatusPedido.getDeliveryStatus(rs.getString("status"))
                 ));
             }
             return entregas;
@@ -118,7 +120,7 @@ public class EntregaDao {
                     m.nome AS nome_motorista,
                     COUNT(e.id) AS total_entrega
                 FROM motorista m
-                INNER JOIN entrega e ON m.id = e.motorista_id
+                LEFT JOIN entrega e ON m.id = e.motorista_id
                 GROUP BY m.nome
                 ORDER BY total_entrega DESC
                 """;

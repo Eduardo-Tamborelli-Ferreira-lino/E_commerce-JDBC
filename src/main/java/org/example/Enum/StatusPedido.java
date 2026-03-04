@@ -14,4 +14,13 @@ public enum StatusPedido {
     public String getNome() {
         return nome;
     }
+
+    public static StatusPedido getDeliveryStatus (String nome){
+        for (StatusPedido deliveryStatus : StatusPedido.values()){
+            if (deliveryStatus.getNome().equalsIgnoreCase(nome)){
+                return deliveryStatus;
+            }
+        }
+        return null;
+    }
 }

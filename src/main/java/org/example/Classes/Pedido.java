@@ -1,14 +1,19 @@
 package org.example.Classes;
 
+import org.example.Enum.StatusPedido;
+
+import java.sql.Time;
+import java.sql.Timestamp;
+
 public class Pedido {
     private int id;
     private int clienteId;
-    private String dataPedido;
+    private Timestamp dataPedido;
     private Double volumeM3;
     private Double peso;
-    private String status;
+    private StatusPedido status;
 
-    public Pedido(int id, int clienteId, String dataPedido, Double volumeM3, Double peso, String status) {
+    public Pedido(int id, int clienteId, Timestamp dataPedido, Double volumeM3, Double peso, StatusPedido status) {
         this.id = id;
         this.clienteId = clienteId;
         this.dataPedido = dataPedido;
@@ -17,7 +22,7 @@ public class Pedido {
         this.status = status;
     }
 
-    public Pedido(int clienteId, String dataPedido, Double volumeM3, Double peso, String status) {
+    public Pedido(int clienteId, Timestamp dataPedido, Double volumeM3, Double peso, StatusPedido status) {
         this.clienteId = clienteId;
         this.dataPedido = dataPedido;
         this.volumeM3 = volumeM3;
@@ -41,11 +46,11 @@ public class Pedido {
         this.clienteId = clienteId;
     }
 
-    public String getDataPedido() {
+    public Timestamp getDataPedido() {
         return dataPedido;
     }
 
-    public void setDataPedido(String dataPedido) {
+    public void setDataPedido(Timestamp dataPedido) {
         this.dataPedido = dataPedido;
     }
 
@@ -65,11 +70,11 @@ public class Pedido {
         this.peso = peso;
     }
 
-    public String getStatus() {
+    public StatusPedido getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(StatusPedido status) {
         this.status = status;
     }
 

@@ -1,15 +1,19 @@
 package org.example.Classes;
 
+import org.example.Enum.StatusPedido;
+
+import java.sql.Timestamp;
+
 public class Entrega {
     private int id;
     private int pedidoId;
     private int motoristaId;
-    private String dataSaida;
+    private Timestamp dataSaida;
     private String dataEntrega;
-    private String status;
+    private StatusPedido status;
 
     // Construtor Completo (para busca no banco)
-    public Entrega(int id, int pedidoId, int motoristaId, String dataSaida, String dataEntrega, String status) {
+    public Entrega(int id, int pedidoId, int motoristaId, Timestamp dataSaida, String dataEntrega, StatusPedido status) {
         this.id = id;
         this.pedidoId = pedidoId;
         this.motoristaId = motoristaId;
@@ -19,9 +23,11 @@ public class Entrega {
     }
 
     // Construtor para novos registros (sem ID e sem data de entrega inicial)
-    public Entrega(int pedidoId, int motoristaId, String status) {
+    public Entrega(int pedidoId, int motoristaId,Timestamp dataSaida, String dataEntrega, StatusPedido status) {
         this.pedidoId = pedidoId;
         this.motoristaId = motoristaId;
+        this.dataSaida = dataSaida;
+        this.dataEntrega = dataEntrega;
         this.status = status;
     }
 
@@ -49,11 +55,11 @@ public class Entrega {
         this.motoristaId = motoristaId;
     }
 
-    public String getDataSaida() {
+    public Timestamp getDataSaida() {
         return dataSaida;
     }
 
-    public void setDataSaida(String dataSaida) {
+    public void setDataSaida(Timestamp dataSaida) {
         this.dataSaida = dataSaida;
     }
 
@@ -65,11 +71,11 @@ public class Entrega {
         this.dataEntrega = dataEntrega;
     }
 
-    public String getStatus() {
+    public StatusPedido getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(StatusPedido status) {
         this.status = status;
     }
 
