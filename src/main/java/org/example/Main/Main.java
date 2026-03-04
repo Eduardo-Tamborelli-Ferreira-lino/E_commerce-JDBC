@@ -1,8 +1,21 @@
-package org.example;
+package org.example.Main;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
+import org.example.Classes.Cliente;
+import org.example.Classes.Motorista;
+import org.example.Classes.Historico;
+import org.example.Classes.Pedido;
+import org.example.Classes.Entrega;
+import org.example.DAO.EntregaDao;
+import org.example.DAO.MotoristaDao;
+import org.example.DAO.ClienteDao;
+import org.example.DAO.PedidoDao;
+import org.example.DAO.HistoricoDao;
+import org.example.DTO.EntregaDetalhadaDTO;
+import org.example.DTO.MaiorVolumeEntregueDTO;
+import org.example.DTO.TotalEntregasMotoristaDTO;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -69,6 +82,14 @@ public class Main {
                     listarECM();
                     break;
                 }
+                case 8:{
+                    listarTEM();
+                    break;
+                }
+                case 9:{
+                    listarMV();
+                    break;
+                }
             }
         }
     }
@@ -114,7 +135,7 @@ public class Main {
     }
 
     public static void criarPedido (){
-        ArrayList <Cliente> clientes = new ArrayList<>();
+        ArrayList<Cliente> clientes = new ArrayList<>();
         try {
             clientes = CLIENTE_DAO.listarCliente();
             if (clientes == null || clientes.isEmpty()){
@@ -303,6 +324,40 @@ public class Main {
         }catch (SQLException e) {
             System.out.println("Erro ao acessar o banco de dados");
             e.printStackTrace();
+        }
+    }
+
+    public static void listarTEM(){
+        ArrayList<TotalEntregasMotoristaDTO> dto = new ArrayList<>();
+        try {
+            dto = ENTREGA_DAO.totalEntregaMotorista();
+        } catch (SQLException e) {
+            System.out.println("Erro ao acessar o banco de dados");
+            e.printStackTrace();
+        }
+        if (dto == null || dto.isEmpty()){
+            System.out.println("Nenhuma Entrega Atribuita a Motoristas");
+            return;
+        }
+        for (TotalEntregasMotoristaDTO motoristaDTO : dto){
+            System.out.println(motoristaDTO);
+        }
+    }
+
+    public static void listarMV(){
+        ArrayList<MaiorVolumeEntregueDTO> dtos = new ArrayList<>();
+        try {
+            dtos = ENTREGA_DAO.MaiorVolumeEntregue();
+        }catch (SQLException e) {
+            System.out.println("Erro ao acessar o banco de dados");
+            e.printStackTrace();
+        }
+        if (dtos == null || dtos.isEmpty()){
+            System.out.println("Nenhuma Entrega Realizada");
+            return;
+        }
+        for (MaiorVolumeEntregueDTO dto : dtos){
+            System.out.println(dto);
         }
     }
 

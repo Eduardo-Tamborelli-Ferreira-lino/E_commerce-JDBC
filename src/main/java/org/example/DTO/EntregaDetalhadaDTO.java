@@ -1,4 +1,4 @@
-package org.example;
+package org.example.DTO;
 
 public record EntregaDetalhadaDTO(
         int idEntrega,

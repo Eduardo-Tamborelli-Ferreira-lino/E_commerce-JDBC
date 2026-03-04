@@ -1,4 +1,4 @@
-package org.example;
+package org.example.Classes;
 
 public class Pedido {
     private int id;

@@ -1,4 +1,8 @@
-package org.example;
+package org.example.DAO;
+
+import org.example.Classes.Motorista;
+import org.example.Conexão.Conexao;
+import org.example.DTO.TotalEntregasMotoristaDTO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -1,4 +1,4 @@
-package org.example;
+package org.example.Classes;
 
 public class Historico{
     private int id;

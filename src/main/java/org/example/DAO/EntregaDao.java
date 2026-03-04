@@ -1,4 +1,10 @@
-package org.example;
+package org.example.DAO;
+
+import org.example.Classes.Entrega;
+import org.example.Conexão.Conexao;
+import org.example.DTO.EntregaDetalhadaDTO;
+import org.example.DTO.MaiorVolumeEntregueDTO;
+import org.example.DTO.TotalEntregasMotoristaDTO;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -103,5 +109,56 @@ public class EntregaDao {
             }
         }
         return entregas;
+    }
+
+    public ArrayList<TotalEntregasMotoristaDTO> totalEntregaMotorista()throws SQLException{
+        ArrayList<TotalEntregasMotoristaDTO> dto = new ArrayList<>();
+        String command = """
+                SELECT
+                    m.nome AS nome_motorista,
+                    COUNT(e.id) AS total_entrega
+                FROM motorista m
+                INNER JOIN entrega e ON m.id = e.motorista_id
+                GROUP BY m.nome
+                ORDER BY total_entrega DESC
+                """;
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement stmt = conn.prepareStatement(command)){
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                dto.add(new TotalEntregasMotoristaDTO(
+                        rs.getString("nome_motorista"),
+                        rs.getInt("total_entrega")
+                ));
+            }
+        }
+        return dto;
+    }
+
+    public ArrayList<MaiorVolumeEntregueDTO> MaiorVolumeEntregue()throws SQLException{
+        ArrayList<MaiorVolumeEntregueDTO> dto = new ArrayList<>();
+        String command = """
+                SELECT
+                    c.nome as nome_cliente,
+                    c.id AS id_cliente,
+                    SUM(p.volume_m3) AS valor
+                FROM cliente c
+                INNER JOIN pedido p ON c.id = p.cliente_id
+                INNER JOIN entrega e ON p.id = e.pedido_id
+                GROUP BY c.id, c.nome
+                ORDER BY valor DESC
+                """;
+        try (Connection conn = Conexao.conectar();
+             PreparedStatement stmt = conn.prepareStatement(command)){
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()){
+                dto.add(new MaiorVolumeEntregueDTO(
+                        rs.getString("nome_cliente"),
+                        rs.getInt("id_cliente"),
+                        rs.getDouble("valor")
+                ));
+            }
+        }
+        return dto;
     }
 }

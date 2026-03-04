@@ -1,4 +1,7 @@
-package org.example;
+package org.example.DAO;
+
+import org.example.Classes.Pedido;
+import org.example.Conexão.Conexao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
